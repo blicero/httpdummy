@@ -1,10 +1,11 @@
-// Time-stamp: <2025-02-12 19:05:16 krylon>
+// Time-stamp: <2025-02-12 19:18:21 krylon>
 
 package main
 
 import (
 	"flag"
 	"fmt"
+	"io"
 	"log"
 	"net/http"
 	"os"
@@ -21,6 +22,7 @@ func main() {
 		router        *mux.Router
 		srv           http.Server
 		fh            *os.File
+		multi         io.Writer
 	)
 
 	flag.StringVar(&addr, "addr", "[::]:8086", "The address to listen on")
@@ -38,16 +40,24 @@ func main() {
 
 	defer fh.Close()
 
-	l = log.New(fh, "http ", log.Ldate|log.Ltime|log.Lshortfile)
+	multi = io.MultiWriter(fh, os.Stdout)
+
+	l = log.New(multi, "http ", log.Ldate|log.Ltime|log.Lshortfile)
 
 	router = mux.NewRouter()
 	srv.Addr = addr
 	srv.Handler = router
 	srv.ErrorLog = l
 
-	router.HandleFunc(".*", handleHTTP)
+	router.HandleFunc("/{req:(?:.*)}", handleHTTP)
 
-	srv.ListenAndServe()
+	if err = srv.ListenAndServe(); err != nil {
+		fmt.Fprintf(
+			os.Stderr,
+			"Failed to start web server: %s\n",
+			err.Error())
+		os.Exit(1)
+	}
 }
 
 func handleHTTP(w http.ResponseWriter, r *http.Request) {
