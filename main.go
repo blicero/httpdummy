@@ -1,4 +1,4 @@
-// Time-stamp: <2025-02-12 19:18:21 krylon>
+// Time-stamp: <2025-02-12 19:20:59 krylon>
 
 package main
 
@@ -26,7 +26,7 @@ func main() {
 	)
 
 	flag.StringVar(&addr, "addr", "[::]:8086", "The address to listen on")
-	flag.StringVar(&logpath, "log", "httpot.log", "The path of the log file")
+	flag.StringVar(&logpath, "log", "httpdummy.log", "The path of the log file")
 	flag.Parse()
 
 	if fh, err = os.Create(logpath); err != nil {
