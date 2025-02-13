@@ -1,4 +1,4 @@
-// Time-stamp: <2025-02-12 19:20:59 krylon>
+// Time-stamp: <2025-02-13 11:13:59 krylon>
 
 package main
 
@@ -61,8 +61,9 @@ func main() {
 }
 
 func handleHTTP(w http.ResponseWriter, r *http.Request) {
-	l.Printf("Handle request for %s from %s\n",
+	l.Printf("Handle request for %s from %s at %s\n",
 		r.URL.EscapedPath(),
+		r.UserAgent(),
 		r.RemoteAddr)
 
 	w.Header().Set("Content-Type", "text/plain")
