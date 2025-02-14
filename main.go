@@ -1,4 +1,4 @@
-// Time-stamp: <2025-02-13 11:13:59 krylon>
+// Time-stamp: <2025-02-14 21:15:12 krylon>
 
 package main
 
@@ -67,6 +67,7 @@ func handleHTTP(w http.ResponseWriter, r *http.Request) {
 		r.RemoteAddr)
 
 	w.Header().Set("Content-Type", "text/plain")
+	w.Header().Set("Server", "Your Mom 69.42")
 	w.WriteHeader(403)
 	w.Write([]byte("Aloha\r\n\r\n"))
 }
